@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import request
 
+from send import send
+
 app = Flask(__name__)
 
 @app.route('/', methods=['GET','POST'])
@@ -16,4 +18,7 @@ def index():
       for event in entry['messaging']:
         if 'message' in event:
           print(event)
+          user = event['sender']['id']
+          message = event['message']['text']
+          send(user, message)
   return "hellow orld"
