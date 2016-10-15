@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
 class User(db.Model):
-  userid = db.Column(db.String('100'), primary_key=True)
+  userid = db.Column(db.String(100), primary_key=True)
   happiness = db.Column(db.Integer)
   hunger = db.Column(db.Integer)
   health = db.Column(db.Integer)
