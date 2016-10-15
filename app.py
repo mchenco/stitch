@@ -9,4 +9,10 @@ def index():
     print("verifying")
     return request.args.get('hub.challenge')
 
-  print(request.json)
+  data = request.json
+  if data['object'] == 'page':
+    for entry in data['entry']:
+      for event in entry['messaging']:
+        if 'message' in event:
+          print(event)
+  return "hellow orld"
