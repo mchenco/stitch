@@ -23,7 +23,11 @@ class User(db.Model):
       self.health = 50
 
 def handle(userid, message):
-    pass
+  if db.session.query(User).filter(User.userid == userid).count() == 0:
+    new_user = User(userid)
+    db.session.add(new_user)
+    db.session.commit()
+    send(userid, "new user created")
 
 @app.route('/', methods=['GET','POST'])
 def index():
@@ -38,7 +42,6 @@ def index():
         if 'message' in event:
           user = event['sender']['id']
           message = event['message']['text']
-          send(user, message)
           handle(user, message)
 
   return "hello world"
