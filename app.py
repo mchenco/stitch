@@ -230,6 +230,14 @@ def index():
 
   return "hello world"
 
+@app.route('/reset')
+def reset():
+  for user in User.query.all():
+    #user = User.query.get('1093820024')
+    db.session.delete(user)
+    db.session.commit()
+  return "resetted"
+
 def decay_happiness():
   for user in User.query.all():
     user.happiness -= 1
