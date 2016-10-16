@@ -8,6 +8,7 @@ from send import send
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['use_reloader'] = False
 db = SQLAlchemy(app)
 
 sched = Scheduler()
