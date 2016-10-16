@@ -127,6 +127,7 @@ def play(user):
     send(user.userid, "I'm kinda tired, you just played with me!")
     return
 
+  user.last_play = int(time.time())
   user.happiness += 10
   db.session.commit()
 
@@ -138,10 +139,11 @@ def treat(user):
     send(user.userid, "I don't feel like a treat right now, I just had one.")
     return
 
+  user.last_treat = int(time.time())
   user.hunger += 10
   db.session.commit()
 
-  message = "you gave me a treat."
+  message = "You gave me a treat. Yay!"
   send(user.userid, message)
 
 def clean(user):
@@ -149,6 +151,7 @@ def clean(user):
     send(user.userid, "I don't feel being cleaned right now.")
     return
 
+  user.last_clean = int(time.time())
   user.health += 10
   db.session.commit()
 
@@ -160,6 +163,7 @@ def pet(user):
     send(user.userid, "Give me some time, you just petted me!")
     return
 
+  user.last_pet = int(time.time())
   user.happiness += 20
   db.session.commit()
 
@@ -171,10 +175,11 @@ def feed(user):
     send(user.userid, "I just ate...")
     return
 
+  user.last_feed = int(time.time())
   user.hunger += 20
   db.session.commit()
 
-  message = "you fed me."
+  message = "You fed me. I'm " + hunger_to_state(user.hunger) + " now!"
   send(user.userid, message)
 
 def vitamin(user):
@@ -182,10 +187,11 @@ def vitamin(user):
     send(user.userid, "I just had some vitamins, I don't want any more.")
     return
 
+  user.last_vitamin = int(time.time())
   user.health += 20
   db.session.commit()
 
-  message = "you gave me vitamins."
+  message = "You gave me vitamins. I'm much healthier now!"
   send(user.userid, message)
 
 @app.route('/', methods=['GET','POST'])
