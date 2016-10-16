@@ -82,5 +82,4 @@ sched.add_interval_job(decay_happiness, minutes=30)
 sched.add_interval_job(decay_health, minutes=60)
 sched.start()
 
-if __name__ == "__main__":
-    app.run(use_reloader=False, port=os.environ.get("PORT"))
+app.run(use_reloader=False, port=os.environ.get("PORT"))
