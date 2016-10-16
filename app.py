@@ -84,4 +84,4 @@ sched.add_interval_job(decay_happiness, minutes=30)
 sched.add_interval_job(decay_health, minutes=60)
 sched.start()
 
-app.run(use_reloader=False, port=os.environ.get("PORT"), host='0.0.0.0')
+app.run(use_reloader=False, port=int(os.environ.get("PORT", 5000)), host='0.0.0.0')
