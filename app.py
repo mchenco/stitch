@@ -45,7 +45,10 @@ def handle(userid, message):
     new_user = User(userid)
     db.session.add(new_user)
     db.session.commit()
-    send(userid, "new user created")
+    send(userid, "Hi! I'm your new pet, Stitch! I can tell we're gonna be great friends already.")
+    send(userid, "I love to eat and play, but I can get bored easily. Be sure to check on me frequently.")
+    send(userid, "Here are some things you can do:")
+    list_commands(new_user)
   else:
     user = User.query.get(userid)
     if "help" in message.lower() or "command" in message.lower():
@@ -64,6 +67,9 @@ def handle(userid, message):
       feed(user)
     elif "vitamin" in message.lower():
       vitamin(user)
+    elif "hi" in message.lower() or "hey" in message.lower() or "hello" in message.lower():
+      send(user.userid, "Hi there! Wanna play?")
+      list_commands(user)
     else:
       msg = "Sorry, I couldn't understand you. Here are some commands you can do:"
       send(user.userid, msg)
@@ -71,6 +77,7 @@ def handle(userid, message):
 
 def list_commands(user):
   commands = ""
+  commands += u"» status" + "\n" 
   commands += u"» play" + "\n"
   commands += u"» give treat" + "\n"
   commands += u"» clean" + "\n"
