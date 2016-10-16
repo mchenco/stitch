@@ -233,9 +233,9 @@ def index():
 @app.route('/reset')
 def reset():
   for user in User.query.all():
-    #user = User.query.get('1093820024')
-    db.session.delete(user)
-    db.session.commit()
+    if user.userid == "1258385334225143":
+      db.session.delete(user)
+      db.session.commit()
   return "resetted"
 
 def decay_happiness():
