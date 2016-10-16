@@ -52,4 +52,4 @@ def hello():
   print("hello from scheduler")
 
 sched.add_interval_job(hello, seconds=5)
-# sched.start()
+sched.start()
