@@ -224,10 +224,9 @@ def index():
     for entry in data['entry']:
       for event in entry['messaging']:
         if 'message' in event:
-          if 'text' in event['message']:
-            user = event['sender']['id']
-            message = event['message']['text']
-            handle(user, message)
+          user = event['sender']['id']
+          message = event['message'].get('text', '')
+          handle(user, message)
 
   return "hello world"
 
