@@ -70,9 +70,9 @@ def decay_hunger():
     db.session.commit()
 
 def decay_health():
-  for user in User.query.all()
-  user.health -= 1
-  db.session.commit()
+  for user in User.query.all():
+    user.health -= 1
+    db.session.commit()
 
 sched.add_interval_job(decay_hunger, minutes=5)
 sched.add_interval_job(decay_happiness, minutes=30)
