@@ -30,6 +30,16 @@ def handle(userid, message):
     db.session.add(new_user)
     db.session.commit()
     send(userid, "new user created")
+  else:
+    if "status" in message.lower():
+      report_status(userid)
+
+def report_status(userid):
+  user = User.query.get(userid)
+  status = "Happiness: "+ str(user.happiness) + "\n"
+  status += "Hunger: " + str(user.hunger) + "\n"
+  status += "Health: " + str(user.health)
+  send(userid, status)
 
 @app.route('/', methods=['GET','POST'])
 def index():
