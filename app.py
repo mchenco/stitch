@@ -134,6 +134,9 @@ def play(user):
   message = "You played with me. I feel happier!"
   send(user.userid, message)
 
+  if user.happines >= 100:
+    user.happiness = 100
+
 def treat(user):
   if user.last_treat >= int(time.time()) - ONE_HOUR:
     send(user.userid, "I don't feel like a treat right now, I just had one.")
@@ -146,6 +149,9 @@ def treat(user):
   message = "You gave me a treat. Yay!"
   send(user.userid, message)
 
+  if user.hunger >= 100:
+    user.hunger = 100
+
 def clean(user):
   if user.last_clean >= int(time.time()) - ONE_HOUR:
     send(user.userid, "I don't feel being cleaned right now.")
@@ -153,6 +159,10 @@ def clean(user):
 
   user.last_clean = int(time.time())
   user.health += 10
+
+  if user.health >= 100:
+    user.health = 100
+
   db.session.commit()
 
   message = "You cleaned me. I'm a bit healthier now!"
@@ -170,6 +180,9 @@ def pet(user):
   message = "You petted me. I feel much happier!"
   send(user.userid, message)
 
+  if user.happiness >= 100:
+    user.happiness = 100
+
 def feed(user):
   if user.last_feed >= int(time.time()) - ONE_HOUR:
     send(user.userid, "I just ate...")
@@ -182,6 +195,9 @@ def feed(user):
   message = "You fed me. I'm " + hunger_to_state(user.hunger) + " now!"
   send(user.userid, message)
 
+  if user.hunger >= 100:
+    user.hunger = 100
+
 def vitamin(user):
   if user.last_vitamin >= int(time.time()) - ONE_HOUR:
     send(user.userid, "I just had some vitamins, I don't want any more.")
@@ -193,6 +209,10 @@ def vitamin(user):
 
   message = "You gave me vitamins. I'm much healthier now!"
   send(user.userid, message)
+
+  if user.health >= 100:
+    user.health = 100
+
 
 @app.route('/', methods=['GET','POST'])
 def index():
