@@ -8,7 +8,6 @@ from send import send
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-app.config['use_reloader'] = False
 db = SQLAlchemy(app)
 
 sched = Scheduler()
@@ -54,3 +53,6 @@ def hello():
 
 sched.add_interval_job(hello, seconds=5)
 sched.start()
+
+if __name__ == "__main__":
+    app.run(use_reloader=False, port=os.environ.get("PORT"))
