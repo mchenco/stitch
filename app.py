@@ -48,10 +48,25 @@ def index():
 
   return "hello world"
 
-def hello():
-  print("hello from scheduler")
+def decay_happiness():
+  for user in User.query.all():
+    user.happiness -= 1
+    db.session.commit()
+    #TODO: if happiness drops below threshold, send appropriate response
 
-sched.add_interval_job(hello, seconds=5)
+def decay_hunger():
+  for user in User.query.all():
+    user.hunger -= 1
+    db.session.commit()
+
+def decay_health():
+  for user in User.query.all()
+  user.health -= 1
+  db.session.commit()
+
+sched.add_interval_job(decay_hunger, minutes=5)
+sched.add_interval_job(decay_happiness, minutes=30)
+sched.add_interval_job(decay_health, minutes=60)
 sched.start()
 
 if __name__ == "__main__":
