@@ -136,13 +136,12 @@ def play(user):
 
   user.last_play = int(time.time())
   user.happiness += 10
+  if user.happines >= 100:
+    user.happiness = 100
   db.session.commit()
 
   message = "You played with me. I feel happier!"
   send(user.userid, message)
-
-  if user.happines >= 100:
-    user.happiness = 100
 
 def treat(user):
   if user.last_treat >= int(time.time()) - ONE_HOUR:
@@ -151,13 +150,12 @@ def treat(user):
 
   user.last_treat = int(time.time())
   user.hunger += 10
+  if user.hunger >= 100:
+    user.hunger = 100
   db.session.commit()
 
   message = "You gave me a treat. Yay!"
   send(user.userid, message)
-
-  if user.hunger >= 100:
-    user.hunger = 100
 
 def clean(user):
   if user.last_clean >= int(time.time()) - ONE_HOUR:
@@ -166,10 +164,8 @@ def clean(user):
 
   user.last_clean = int(time.time())
   user.health += 10
-
   if user.health >= 100:
     user.health = 100
-
   db.session.commit()
 
   message = "You cleaned me. I'm a bit healthier now!"
@@ -182,13 +178,12 @@ def pet(user):
 
   user.last_pet = int(time.time())
   user.happiness += 20
+  if user.happiness >= 100:
+    user.happiness = 100
   db.session.commit()
 
   message = "You petted me. I feel much happier!"
   send(user.userid, message)
-
-  if user.happiness >= 100:
-    user.happiness = 100
 
 def feed(user):
   if user.last_feed >= int(time.time()) - ONE_HOUR:
@@ -197,13 +192,12 @@ def feed(user):
 
   user.last_feed = int(time.time())
   user.hunger += 20
+  if user.hunger >= 100:
+    user.hunger = 100
   db.session.commit()
 
   message = "You fed me. I'm " + hunger_to_state(user.hunger) + " now!"
   send(user.userid, message)
-
-  if user.hunger >= 100:
-    user.hunger = 100
 
 def vitamin(user):
   if user.last_vitamin >= int(time.time()) - ONE_HOUR:
@@ -212,14 +206,12 @@ def vitamin(user):
 
   user.last_vitamin = int(time.time())
   user.health += 20
+  if user.health >= 100:
+    user.health = 100
   db.session.commit()
 
   message = "You gave me vitamins. I'm much healthier now!"
   send(user.userid, message)
-
-  if user.health >= 100:
-    user.health = 100
-
 
 @app.route('/', methods=['GET','POST'])
 def index():
