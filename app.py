@@ -33,18 +33,67 @@ def handle(userid, message):
     db.session.commit()
     send(userid, "new user created")
   else:
-    if "status" in message.lower():
-      print("reporting status")
-      report_status(userid)
+    user = User.query.get(userid)
+    if "help" in message.lower() or "command" in message.lower():
+      list_commands(user)
+    elif "status" in message.lower():
+      report_status(user)
+    elif "play" in message.lower():
+      play(user)
+    elif "treat" in message.lower():
+      treat(user)
+    elif "clean" in message.lower():
+      clean(user)
+    elif "pet" in message.lower():
+      pet(user)
+    elif "feed" in message.lower():
+      feed(user)
+    elif "vitamin" in message.lower():
+      vitamin(user)
     else:
-      print("didn't find status")
+      msg = "Sorry, I couldn't understand you. Here are some commands you can do:"
+      send(user.userid, msg)
+      list_commands(user)
 
-def report_status(userid):
-  user = User.query.get(userid)
+def list_commands(user):
+  commands = ""
+  commands += "» play" + "\n"
+  commands += "» give treat" + "\n"
+  commands += "» clean" + "\n"
+  commands += "» pet" + "\n"
+  commands += "» feed" + "\n"
+  commands += "» give vitamins"
+  send(user.userid, commands)
+
+def report_status(user):
   status = "Happiness: "+ str(user.happiness) + "\n"
   status += "Hunger: " + str(user.hunger) + "\n"
   status += "Health: " + str(user.health)
-  send(userid, status)
+  send(user.userid, status)
+
+def play(user):
+  message = "you played with me."
+  send(user.userid, message)
+
+def treat(user):
+  message = "you gave me a treat."
+  send(user.userid, message)
+
+def clean(user):
+  message = "you cleaned me."
+  send(user.userid, message)
+
+def pet(user):
+  message = "you petted me."
+  send(user.userid, message)
+
+def feed(user):
+  message = "you fed me."
+  send(user.userid, message)
+
+def vitamin(user):
+  message = "you gave me vitamins."
+  send(user.userid, message)
 
 @app.route('/', methods=['GET','POST'])
 def index():
@@ -67,17 +116,44 @@ def decay_happiness():
   for user in User.query.all():
     user.happiness -= 1
     db.session.commit()
-    #TODO: if happiness drops below threshold, send appropriate response
+    if user.happiness ==  30:
+      send(user.userid, "I'm bored... Wanna play?")
+    if user.happiness == 10:
+      send(user.userid, "I'm really sad. Are you still there?")
+    if user.happiness == 0:
+      message = "Stitch ran away."
+      death(user, message)
 
 def decay_hunger():
   for user in User.query.all():
     user.hunger -= 1
     db.session.commit()
+    if user.hunger == 30:
+      send(user.userid, "Hey, I'm getting hungry. Feed me a snack!")
+    if user.hunger == 10:
+      send(user.userid, "I'm starving! Feed me or I'll die.")
+    if user.hunger == 0:
+      message = "Stitch died of hunger."
+      death(user, message)
 
 def decay_health():
   for user in User.query.all():
     user.health -= 1
     db.session.commit()
+    if user.health == 30:
+      send(user.userid, "I'm feeling kind of gross. Maybe a bath will help.")
+    if user.health == 10:
+      send(user.userid, "Do you have any vitamins? I think I'm sick!")
+    if user.health == 0:
+      message = "Stitch died of an undetected terminal illness. RIP Stitch."
+      death(user, message)
+
+def death(user, message):
+  send(user.userid, message)
+  send(user.userid, "Type anything to get another Stitch")
+  db.session.delete(user)
+  db.session.commit()
+  #todo: when levels, send level you got to
 
 sched.add_interval_job(decay_hunger, minutes=5)
 sched.add_interval_job(decay_happiness, minutes=30)
