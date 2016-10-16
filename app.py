@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 from flask import Flask
 from flask import request
@@ -57,12 +59,12 @@ def handle(userid, message):
 
 def list_commands(user):
   commands = ""
-  commands += "» play" + "\n"
-  commands += "» give treat" + "\n"
-  commands += "» clean" + "\n"
-  commands += "» pet" + "\n"
-  commands += "» feed" + "\n"
-  commands += "» give vitamins"
+  commands += u"» play" + "\n"
+  commands += u"» give treat" + "\n"
+  commands += u"» clean" + "\n"
+  commands += u"» pet" + "\n"
+  commands += u"» feed" + "\n"
+  commands += u"» give vitamins"
   send(user.userid, commands)
 
 def report_status(user):
@@ -72,26 +74,44 @@ def report_status(user):
   send(user.userid, status)
 
 def play(user):
+  user.happiness += 10
+  db.session.commit()
+
   message = "you played with me."
   send(user.userid, message)
 
 def treat(user):
+  user.hunger += 10
+  db.session.commit()
+
   message = "you gave me a treat."
   send(user.userid, message)
 
 def clean(user):
+  user.health += 10
+  db.session.commit()
+
   message = "you cleaned me."
   send(user.userid, message)
 
 def pet(user):
+  user.happiness += 20
+  db.session.commit()
+
   message = "you petted me."
   send(user.userid, message)
 
 def feed(user):
+  user.hunger += 20
+  db.session.commit()
+
   message = "you fed me."
   send(user.userid, message)
 
 def vitamin(user):
+  user.health += 20
+  db.session.commit()
+
   message = "you gave me vitamins."
   send(user.userid, message)
 
