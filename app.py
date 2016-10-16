@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
 from flask import Flask
 from flask import request
 from apscheduler.scheduler import Scheduler
@@ -19,12 +20,14 @@ class User(db.Model):
   happiness = db.Column(db.Integer)
   hunger = db.Column(db.Integer)
   health = db.Column(db.Integer)
+  timestamp = db.Column(db.Integer)
 
   def __init__(self, userid):
       self.userid = userid
       self.happiness = 50
       self.hunger = 50
       self.health = 50
+      self.timestamp = int(time.time())
 
 def handle(userid, message):
   print("got message:")
@@ -170,10 +173,12 @@ def decay_health():
 
 def death(user, message):
   send(user.userid, message)
+  seconds_alive = int(time.time()) - user.timestamp
+  days_alive = seconds_alive / (60 * 60 * 24)
+  send(user.userid, "Your Stitch was alive for " + str(days_alive) + " days.")
   send(user.userid, "Type anything to get another Stitch")
   db.session.delete(user)
   db.session.commit()
-  #todo: when levels, send level you got to
 
 sched.add_interval_job(decay_hunger, minutes=5)
 sched.add_interval_job(decay_happiness, minutes=30)
