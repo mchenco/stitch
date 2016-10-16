@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from flask import request
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.scheduler.background import BackgroundScheduler
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from send import send
