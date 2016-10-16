@@ -51,5 +51,5 @@ def index():
 def hello():
   print("hello from scheduler")
 
-sched.add_job(hello, 'interval', seconds=5)
+sched.add_interval_job(hello, seconds=5)
 sched.start()
