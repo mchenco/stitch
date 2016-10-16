@@ -32,7 +32,10 @@ def handle(userid, message):
     send(userid, "new user created")
   else:
     if "status" in message.lower():
+      print("reporting status")
       report_status(userid)
+    else:
+      print("didn't find status")
 
 def report_status(userid):
   user = User.query.get(userid)
