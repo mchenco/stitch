@@ -25,6 +25,8 @@ class User(db.Model):
       self.health = 50
 
 def handle(userid, message):
+  print("got message:")
+  print(message)
   if db.session.query(User).filter(User.userid == userid).count() == 0:
     new_user = User(userid)
     db.session.add(new_user)
