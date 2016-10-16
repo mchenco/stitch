@@ -136,7 +136,7 @@ def play(user):
 
   user.last_play = int(time.time())
   user.happiness += 10
-  if user.happines >= 100:
+  if user.happiness >= 100:
     user.happiness = 100
   db.session.commit()
 
