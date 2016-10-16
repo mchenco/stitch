@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from flask import request
-from apscheduler.scheduler.background import BackgroundScheduler
+from apscheduler.scheduler import Scheduler
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from send import send
@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
-scheduler = BackgroundScheduler()
+sched = Scheduler()
 
 class User(db.Model):
   userid = db.Column(db.String(100), primary_key=True)
@@ -51,5 +51,5 @@ def index():
 def hello():
   print("hello from scheduler")
 
-scheduler.add_job(hello, 'interval', seconds=5)
-scheduler.start()
+sched.add_job(hello, 'interval', seconds=5)
+sched.start()
