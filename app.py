@@ -71,10 +71,47 @@ def list_commands(user):
   send(user.userid, commands)
 
 def report_status(user):
-  status = "Happiness: "+ str(user.happiness) + "\n"
-  status += "Hunger: " + str(user.hunger) + "\n"
-  status += "Health: " + str(user.health)
+  status = ""
+  status += "Happiness: " + happiness_to_state(user.happiness) + "\n"
+  status += "Hunger: " + hunger_to_state(user.hunger) + "\n"
+  status += "Health: " + health_to_state(user.health)
   send(user.userid, status)
+
+def happiness_to_state(happiness):
+  if happiness >= 80:
+    return "Delighted"
+  if happiness >= 60:
+    return "Joyful"
+  if happiness >= 40:
+    return "Happy"
+  if happiness >= 20:
+    return "Sad"
+  if happiness >= 0:
+    return "Depressed"
+
+def hunger_to_state(hunger):
+  if hunger >= 80:
+    return "Stuffed"
+  if hunger >= 60:
+    return "Full"
+  if hunger >= 40:
+    return "Satisfied"
+  if hunger >= 20:
+    return "Hungry"
+  if hunger >= 0:
+    return "Starving"
+
+def health_to_state(health):
+  if health >= 80:
+    return "Perfectly healthy"
+  if health >= 60:
+    return "In good health"
+  if health >= 40:
+    return "Decently healthy"
+  if health >= 20:
+    return "Sick"
+  if health >= 0:
+    return "Dying"
 
 def play(user):
   user.happiness += 10
