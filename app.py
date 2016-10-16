@@ -15,12 +15,21 @@ db = SQLAlchemy(app)
 
 sched = Scheduler()
 
+ONE_HOUR = 60 * 60
+
 class User(db.Model):
   userid = db.Column(db.String(100), primary_key=True)
   happiness = db.Column(db.Integer)
   hunger = db.Column(db.Integer)
   health = db.Column(db.Integer)
   timestamp = db.Column(db.Integer)
+
+  last_play = db.Column(db.Integer, default=0)
+  last_treat = db.Column(db.Integer, default=0)
+  last_clean = db.Column(db.Integer, default=0)
+  last_pet = db.Column(db.Integer, default=0)
+  last_feed = db.Column(db.Integer, default=0)
+  last_vitamin = db.Column(db.Integer, default=0)
 
   def __init__(self, userid):
       self.userid = userid
@@ -114,13 +123,21 @@ def health_to_state(health):
     return "Dying"
 
 def play(user):
+  if user.last_play >= int(time.time()) - ONE_HOUR:
+    send(user.userid, "I'm kinda tired, you just played with me!")
+    return
+
   user.happiness += 10
   db.session.commit()
 
-  message = "you played with me."
+  message = "You played with me. I feel happier!"
   send(user.userid, message)
 
 def treat(user):
+  if user.last_treat >= int(time.time()) - ONE_HOUR:
+    send(user.userid, "I don't feel like a treat right now, I just had one.")
+    return
+
   user.hunger += 10
   db.session.commit()
 
@@ -128,20 +145,32 @@ def treat(user):
   send(user.userid, message)
 
 def clean(user):
+  if user.last_clean >= int(time.time()) - ONE_HOUR:
+    send(user.userid, "I don't feel being cleaned right now.")
+    return
+
   user.health += 10
   db.session.commit()
 
-  message = "you cleaned me."
+  message = "You cleaned me. I'm a bit healthier now!"
   send(user.userid, message)
 
 def pet(user):
+  if user.last_pet >= int(time.time()) - ONE_HOUR:
+    send(user.userid, "Give me some time, you just petted me!")
+    return
+
   user.happiness += 20
   db.session.commit()
 
-  message = "you petted me."
+  message = "You petted me. I feel much happier!"
   send(user.userid, message)
 
 def feed(user):
+  if user.last_feed >= int(time.time()) - ONE_HOUR:
+    send(user.userid, "I just ate...")
+    return
+
   user.hunger += 20
   db.session.commit()
 
@@ -149,6 +178,10 @@ def feed(user):
   send(user.userid, message)
 
 def vitamin(user):
+  if user.last_vitamin >= int(time.time()) - ONE_HOUR:
+    send(user.userid, "I just had some vitamins, I don't want any more.")
+    return
+
   user.health += 20
   db.session.commit()
 
