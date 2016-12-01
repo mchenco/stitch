@@ -17,6 +17,7 @@ sched = Scheduler()
 
 ONE_HOUR = 60 * 60
 
+#created a User given the database 
 class User(db.Model):
   userid = db.Column(db.String(100), primary_key=True)
   happiness = db.Column(db.Integer)
@@ -31,6 +32,7 @@ class User(db.Model):
   last_feed = db.Column(db.Integer, default=0)
   last_vitamin = db.Column(db.Integer, default=0)
 
+  #initializing a user
   def __init__(self, userid):
       self.userid = userid
       self.happiness = 50
@@ -38,7 +40,10 @@ class User(db.Model):
       self.health = 50
       self.timestamp = int(time.time())
 
+#receiving a message
 def handle(userid, message):
+  #if the user does not exist in the database, create a new user
+  #add it to the database
   if db.session.query(User).filter(User.userid == userid).count() == 0:
     new_user = User(userid)
     db.session.add(new_user)
@@ -47,6 +52,8 @@ def handle(userid, message):
     send(userid, "I love to eat and play, but I can get bored easily. Be sure to check on me frequently.")
     send(userid, "Here are some things you can do:")
     list_commands(new_user)
+
+  #check for keywords in the message
   else:
     user = User.query.get(userid)
     if "help" in message.lower() or "command" in message.lower():
@@ -73,6 +80,7 @@ def handle(userid, message):
       send(user.userid, msg)
       list_commands(user)
 
+#lists the commands that a user can do
 def list_commands(user):
   commands = ""
   commands += u"» status" + "\n" 
@@ -84,6 +92,7 @@ def list_commands(user):
   commands += u"» give vitamins"
   send(user.userid, commands)
 
+#replies with status of the pet
 def report_status(user):
   status = ""
   status += "Happiness: " + happiness_to_state(user.happiness) + "\n"
@@ -91,6 +100,7 @@ def report_status(user):
   status += "Health: " + health_to_state(user.health)
   send(user.userid, status)
 
+#converts quantititave happiness level to adjectives
 def happiness_to_state(happiness):
   if happiness >= 80:
     return "Delighted"
@@ -103,6 +113,7 @@ def happiness_to_state(happiness):
   if happiness >= 0:
     return "Depressed"
 
+#converts quantititave hunger level to adjectives
 def hunger_to_state(hunger):
   if hunger >= 80:
     return "Stuffed"
@@ -115,6 +126,7 @@ def hunger_to_state(hunger):
   if hunger >= 0:
     return "Starving"
 
+#converts quantititave health level to adjectives
 def health_to_state(health):
   if health >= 80:
     return "Perfectly healthy"
@@ -128,15 +140,16 @@ def health_to_state(health):
     return "Dying"
 
 def play(user):
+  #ensures that commands aren't too frequent
   if user.last_play >= int(time.time()) - ONE_HOUR:
     send(user.userid, "I'm kinda tired, you just played with me!")
     return
 
   user.last_play = int(time.time())
-  user.happiness += 10
+  user.happiness += 10 #increment happiness levels
   if user.happiness >= 100:
     user.happiness = 100
-  db.session.commit()
+  db.session.commit() #push it to database
 
   message = "You played with me. I feel happier!"
   send(user.userid, message)
